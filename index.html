@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#111111">
+  <meta name="description" content="FoggiApp – La guida turistica ufficiale di Foggia.">
+  <title>FoggiApp – Scopri Foggia</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="nav-logo" onclick="showPage('home')">
+    <div class="nav-logo-icon" style="overflow:hidden;padding:0;border-radius:10px;width:40px;height:40px;">
+      <svg width="40" height="40" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+        <rect width="1080" height="1080" rx="80" fill="#E30613"/>
+        <ellipse cx="540" cy="685" rx="390" ry="58" fill="white"/>
+        <path d="M162 685 Q162 338 540 258 Q918 338 918 685 Z" fill="white"/>
+        <ellipse cx="540" cy="624" rx="330" ry="48" fill="#E30613"/>
+        <path d="M540 268 Q540 620 540 672" stroke="#E30613" stroke-width="18" fill="none"/>
+        <path d="M540 268 Q602 452 622 672" stroke="#E30613" stroke-width="13" fill="none" opacity="0.8"/>
+        <path d="M540 268 Q478 452 458 672" stroke="#E30613" stroke-width="13" fill="none" opacity="0.8"/>
+        <path d="M540 268 Q664 472 702 672" stroke="#E30613" stroke-width="10" fill="none" opacity="0.6"/>
+        <path d="M540 268 Q416 472 378 672" stroke="#E30613" stroke-width="10" fill="none" opacity="0.6"/>
+        <path d="M540 268 Q724 502 762 672" stroke="#E30613" stroke-width="7" fill="none" opacity="0.4"/>
+        <path d="M540 268 Q356 502 318 672" stroke="#E30613" stroke-width="7" fill="none" opacity="0.4"/>
+        <rect x="172" y="643" width="736" height="54" rx="8" fill="white"/>
+        <rect x="190" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="222" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="254" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="286" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="318" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="350" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="382" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="414" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="446" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="478" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="510" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="542" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="574" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="606" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="638" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="670" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="702" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="734" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="766" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="798" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="830" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="862" y="651" width="17" height="40" rx="4" fill="#E30613"/>
+        <rect x="506" y="178" width="68" height="90" rx="10" fill="white"/>
+        <ellipse cx="540" cy="178" rx="54" ry="27" fill="white"/>
+        <rect x="518" y="130" width="44" height="52" rx="8" fill="white"/>
+        <ellipse cx="540" cy="130" rx="32" ry="18" fill="white"/>
+        <rect x="526" y="96" width="28" height="38" rx="6" fill="white"/>
+        <ellipse cx="540" cy="96" rx="18" ry="12" fill="white"/>
+        <rect x="534" y="66" width="12" height="34" rx="4" fill="white"/>
+        <path d="M162 685 Q178 724 222 702" stroke="white" stroke-width="22" fill="none"/>
+        <path d="M918 685 Q902 724 858 702" stroke="white" stroke-width="22" fill="none"/>
+        <text x="540" y="888" font-family="'Futura','Century Gothic','Trebuchet MS',sans-serif" font-weight="900" font-size="172" fill="white" text-anchor="middle" letter-spacing="-4">FOGGIAPP</text>
+      </svg>
+    </div>
+    <div class="nav-logo-text">Foggi<span>App</span></div>
+  </div>
+  <div class="nav-actions">
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="IT" onclick="toggleLang('IT')">IT</button>
+      <button class="lang-btn" data-lang="EN" onclick="toggleLang('EN')">EN</button>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()">☀️</button>
+  </div>
+</nav>
+
+<!-- ===== HOME ===== -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-city-art">
+      <svg width="340" height="200" viewBox="0 0 340 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="60" y="110" width="220" height="70" fill="white" opacity="0.85"/>
+        <rect x="90" y="80" width="160" height="100" fill="white" opacity="0.85"/>
+        <rect x="130" y="50" width="80" height="130" fill="white" opacity="0.9"/>
+        <rect x="155" y="14" width="30" height="166" fill="white"/>
+        <circle cx="170" cy="48" r="22" fill="white"/>
+        <rect x="0" y="140" width="60" height="44" fill="white" opacity="0.75"/>
+        <rect x="280" y="140" width="60" height="44" fill="white" opacity="0.75"/>
+      </svg>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">✦ La guida ufficiale di Foggia</div>
+      <h1 class="hero-title">Scopri Foggia come non l'hai mai vista</h1>
+      <p class="hero-subtitle">Monumenti, storia, luoghi contemporanei e una mappa interattiva per esplorare il cuore della Capitanata.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="showPage('monumenti')">Esplora la città →</button>
+        <button class="btn-secondary" onclick="showPage('mappa')">📍 Apri la mappa</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><h2 class="section-title">Cosa fare oggi</h2></div>
+    <div id="oggi-list"></div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-header"><h2 class="section-title">Esplora</h2></div>
+    <div class="quick-cats" id="quick-cats"></div>
+  </div>
+  <div class="divider"></div>
+
+  <!-- ITINERARI CTA BANNER -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">Itinerari guidati</h2>
+      <span class="section-link" onclick="showPage('itinerari')">Vedi tutti</span>
+    </div>
+    <div class="itinerari-cta-banner" onclick="showPage('itinerari')">
+      <div class="itinerari-cta-bg"></div>
+      <div class="itinerari-cta-content">
+        <div class="itinerari-cta-icon">🗺️</div>
+        <div class="itinerari-cta-text">
+          <div class="itinerari-cta-title">5 itinerari per scoprire Foggia</div>
+          <div class="itinerari-cta-sub">Storico · Primavera · Estate · Autunno · Inverno</div>
+        </div>
+        <div class="itinerari-cta-arrow">→</div>
+      </div>
+      <div class="itinerari-season-pills">
+        <span class="season-pill">🏛️ Storico</span>
+        <span class="season-pill">🌸 Primavera</span>
+        <span class="season-pill">☀️ Estate</span>
+        <span class="season-pill">🍂 Autunno</span>
+        <span class="season-pill">❄️ Inverno</span>
+      </div>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">Luoghi da visitare</h2>
+      <span class="section-link" onclick="showPage('monumenti')">Vedi tutti</span>
+    </div>
+    <div class="h-scroll" id="featured-monuments"></div>
+  </div>
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">Dove mangiare</h2>
+      <span class="section-link" onclick="showPage('ristoranti')">Vedi tutti</span>
+    </div>
+    <div class="h-scroll" id="top-restaurants"></div>
+  </div>
+</div>
+
+<!-- ===== MAPPA ===== -->
+<div id="page-mappa" class="page">
+  <div class="map-filter-bar">
+    <button class="filter-chip map-filter-chip active" data-filter="all" onclick="setMapFilter('all')">🗺️ Tutti</button>
+    <button class="filter-chip map-filter-chip" data-filter="monument" onclick="setMapFilter('monument')">🏛️ Monumenti</button>
+    <button class="filter-chip map-filter-chip" data-filter="restaurant" onclick="setMapFilter('restaurant')">🍽️ Ristoranti</button>
+    <button class="filter-chip map-filter-chip" data-filter="nightlife" onclick="setMapFilter('nightlife')">🎭 Locali</button>
+  </div>
+  <div id="map"></div>
+  <div style="position:fixed;bottom:calc(var(--bottom-nav-height)+16px);right:16px;z-index:900;display:flex;flex-direction:column;gap:8px;">
+    <button onclick="rotateMap('ccw')" style="width:44px;height:44px;border-radius:50%;background:rgba(17,17,17,0.9);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1);color:white;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">↺</button>
+    <button onclick="rotateMap('cw')"  style="width:44px;height:44px;border-radius:50%;background:rgba(17,17,17,0.9);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1);color:white;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">↻</button>
+  </div>
+</div>
+
+<!-- ===== MONUMENTI ===== -->
+<div id="page-monumenti" class="page">
+  <div class="page-header">
+    <h1 class="page-header-title">Monumenti & Storia</h1>
+    <p class="page-header-sub">Scopri l'eredità storica di Foggia</p>
+  </div>
+  <div class="section" style="padding-top:8px;"><div id="monumenti-list"></div></div>
+</div>
+
+<!-- ===== RISTORANTI ===== -->
+<div id="page-ristoranti" class="page">
+  <div class="page-header">
+    <h1 class="page-header-title">Ristoranti</h1>
+    <p class="page-header-sub">I migliori tavoli di Foggia</p>
+  </div>
+  <div class="section" style="padding-top:8px;">
+    <div class="search-bar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#666;flex-shrink:0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="rest-search" placeholder="Cerca ristoranti…">
+    </div>
+    <div class="filter-row" id="rest-filters"></div>
+    <div id="rest-list"></div>
+  </div>
+</div>
+
+<!-- ===== NIGHTLIFE ===== -->
+<div id="page-nightlife" class="page">
+  <div class="page-header">
+    <h1 class="page-header-title">Locali & Nightlife</h1>
+    <p class="page-header-sub">Bar, club, teatri e cinema</p>
+  </div>
+  <div class="section" style="padding-top:8px;">
+    <div class="search-bar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#666;flex-shrink:0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="night-search" placeholder="Cerca locali…">
+    </div>
+    <div class="filter-row" id="night-filters"></div>
+    <div id="night-list"></div>
+  </div>
+</div>
+
+<!-- ===== ITINERARI ===== -->
+<div id="page-itinerari" class="page">
+  <div class="page-header">
+    <h1 class="page-header-title">Itinerari</h1>
+    <p class="page-header-sub">5 percorsi per scoprire Foggia</p>
+  </div>
+  <div class="section" style="padding-top:8px;">
+
+    <!-- 1. STORICO -->
+    <div class="itinerario-card">
+      <div class="itinerario-hero" style="background:linear-gradient(135deg,#1a0505,#3d0e0e,#6b1414);">
+        <div class="itinerario-season-badge">🏛️ Tutto l'anno</div>
+        <div class="itinerario-title">Foggia Storica</div>
+        <div class="itinerario-meta-row">
+          <span class="itinerario-meta-chip">⏱ 8 ore</span>
+          <span class="itinerario-meta-chip">🚶 4 km</span>
+          <span class="itinerario-meta-chip">⭐ Primo giorno</span>
+        </div>
+      </div>
+      <div class="itinerario-body">
+        <div class="itinerario-clima">🏛️ Focus su monumenti e atmosfera antica — ideale per il primo giorno</div>
+        <ul class="itinerario-steps">
+          <li class="itinerario-step"><span class="step-time">09:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Stazione Centrale FS</div><div class="step-desc">Punto di partenza. Bus n.2 o 10 min a piedi fino al centro.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">09:30</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Cattedrale Santa Maria Icona Vetere</div><div class="step-desc">La cripta normanna e l'icona miracolosa del 1073, simbolo fondativo della città.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">10:30</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Arco di Federico II</div><div class="step-desc">Unica testimonianza del palazzo imperiale svevo del XIII secolo.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">11:30</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Museo Civico – Palazzo Arpi</div><div class="step-desc">Stele daunie, Tomba della Medusa e ipogei urbani sotterranei.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">13:30</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Pranzo da Tabó o Nenna Nè</div><div class="step-desc">Cucina foggiana autentica nel cuore del centro storico.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">15:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Chiesa delle Croci</div><div class="step-desc">Monumento Nazionale. Barocco e memoria del terremoto del 1731.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">16:30</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Palazzo Dogana & Teatro Giordano</div><div class="step-desc">I due simboli del '700 foggiano, cuore del salotto cittadino.</div></div></li>
+        </ul>
+      </div>
+      <div class="itinerario-footer">
+        <span class="itinerario-footer-info">🚌 Bus n.2 · 🚶 4 km totali</span>
+        <button class="btn-start-tour" onclick="showPage('monumenti')">Inizia →</button>
+      </div>
+    </div>
+
+    <!-- 2. PRIMAVERA -->
+    <div class="itinerario-card">
+      <div class="itinerario-hero" style="background:linear-gradient(135deg,#0b2010,#1a4a22,#2a7a38);">
+        <div class="itinerario-season-badge">🌸 Aprile – Giugno</div>
+        <div class="itinerario-title">Foggia in Fiore</div>
+        <div class="itinerario-meta-row">
+          <span class="itinerario-meta-chip">🌡 18–25°C</span>
+          <span class="itinerario-meta-chip">🚶 3 km</span>
+          <span class="itinerario-meta-chip">⏱ Full day</span>
+        </div>
+      </div>
+      <div class="itinerario-body">
+        <div class="itinerario-clima" style="color:#2a8a3a;background:rgba(42,138,58,0.1);">🌸 Clima perfetto per passeggiate lunghe. Fiori ovunque nelle ville comunali.</div>
+        <ul class="itinerario-steps">
+          <li class="itinerario-step"><span class="step-time">08:30</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Colazione al Mercato Coperto Rosati</div><div class="step-desc">Caffè e pasticciotto coi locali. Corso Garibaldi — il cuore del mattino foggiano.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">09:30</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Cattedrale Santa Maria Icona Vetere</div><div class="step-desc">Cripta normanna e icona miracolosa del 1073.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">10:30</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Arco di Federico II e Palazzo Dogana</div><div class="step-desc">Via Arpi fino all'arco svevo, ingresso del palazzo imperiale perduto.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">12:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Pranzo da Osteria Terra Arsa</div><div class="step-desc">Troccoli al ragù di mare e polpo in pignata — Viale Virgilio 13/D.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">14:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Villa Comunale Karol Wojtyła</div><div class="step-desc">Palme secolari e Fontana del Sele. Passeggiata all'ombra.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">16:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Chiesa delle Croci</div><div class="step-desc">Barocco puro. Apparizione mariana del 1731 a Sant'Alfonso de' Liguori.</div></div></li>
+        </ul>
+      </div>
+      <div class="itinerario-footer">
+        <span class="itinerario-footer-info">🚌 Linea 2 per Terra Arsa · 3 km</span>
+        <button class="btn-start-tour" onclick="showPage('mappa')">Inizia →</button>
+      </div>
+    </div>
+
+    <!-- 3. ESTATE -->
+    <div class="itinerario-card">
+      <div class="itinerario-hero" style="background:linear-gradient(135deg,#1a1100,#3d2900,#7a5200);">
+        <div class="itinerario-season-badge">☀️ Luglio – Settembre</div>
+        <div class="itinerario-title">Fresca Foggia</div>
+        <div class="itinerario-meta-row">
+          <span class="itinerario-meta-chip">🌡 32–40°C</span>
+          <span class="itinerario-meta-chip">🚶 2,5 km</span>
+          <span class="itinerario-meta-chip">🌅 Mattino + Sera</span>
+        </div>
+      </div>
+      <div class="itinerario-body">
+        <div class="itinerario-clima" style="color:#c08800;background:rgba(192,136,0,0.1);">☀️ Mattinata presto + indoor + aperitivo serale. Taxi raccomandato dopo le 20:00.</div>
+        <ul class="itinerario-steps">
+          <li class="itinerario-step"><span class="step-time">07:30</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Colazione – Bar Civico 65</div><div class="step-desc">Granita di mandorla e brioche. Viale d'Addedda — prima del caldo.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">08:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Centro Storico mattutino (1h)</div><div class="step-desc">Cattedrale → Arco Federico II → Piazza dell'Olmo. La vera vita di quartiere.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">10:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Teatro Umberto Giordano</div><div class="step-desc">Visita esterna del teatro neoclassico più elegante del Sud Italia.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">11:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Rinfresco – Glamour Lounge Bar</div><div class="step-desc">Sorbetto al limone all'ombra. Corso Mezzogiorno.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">19:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Cena – Papille Espressioni di Gusto</div><div class="step-desc">Pizza fantasia con birre artigianali, poi passeggiata digestiva.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">21:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">London Pub o Replay Club</div><div class="step-desc">Musica anni '90 o birre sotto le stelle. Foggia by night autentica.</div></div></li>
+        </ul>
+      </div>
+      <div class="itinerario-footer">
+        <span class="itinerario-footer-info">🚕 Taxi dopo le 20:00 · 2,5 km</span>
+        <button class="btn-start-tour" onclick="showPage('nightlife')">Inizia →</button>
+      </div>
+    </div>
+
+    <!-- 4. AUTUNNO -->
+    <div class="itinerario-card">
+      <div class="itinerario-hero" style="background:linear-gradient(135deg,#1a0d00,#3d2000,#7a4200);">
+        <div class="itinerario-season-badge">🍂 Ottobre – Novembre</div>
+        <div class="itinerario-title">Foggia Autentica</div>
+        <div class="itinerario-meta-row">
+          <span class="itinerario-meta-chip">🌡 15–22°C</span>
+          <span class="itinerario-meta-chip">🚶 4 km</span>
+          <span class="itinerario-meta-chip">🍷 Sagre & food</span>
+        </div>
+      </div>
+      <div class="itinerario-body">
+        <div class="itinerario-clima" style="color:#b06000;background:rgba(176,96,0,0.1);">🍂 Festival enogastronomici e sagre. Il meglio dell'autunno dauno.</div>
+        <ul class="itinerario-steps">
+          <li class="itinerario-step"><span class="step-time">09:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Piazza Cavour e Fontana del Sele</div><div class="step-desc">Il salotto buono di Foggia con vista sui palazzi liberty.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">10:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Palazzo dell'Acquedotto (Via Lanza)</div><div class="step-desc">Struttura unica a doppio ingresso, simbolo dell'arrivo dell'acqua in città.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">11:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Mercato Coperto Rosati</div><div class="step-desc">Taralli, cacioricotta e mortadella — spesa autentica dai produttori locali.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">12:30</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Pranzo – Il Piccolo Ristoro</div><div class="step-desc">Pesce fresco e orecchiette. Viale Ofanto 135.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">14:30</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Parco Città (Via Rovelli)</div><div class="step-desc">Area verde con anfiteatro. Relax autunnale all'aria aperta.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">16:30</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Teatro del Fuoco o Officina Teatrale</div><div class="step-desc">Prosa o cabaret di qualità. Controlla la programmazione serale.</div></div></li>
+        </ul>
+      </div>
+      <div class="itinerario-footer">
+        <span class="itinerario-footer-info">🚌 Bus F1 serale · 4 km totali</span>
+        <button class="btn-start-tour" onclick="showPage('nightlife')">Inizia →</button>
+      </div>
+    </div>
+
+    <!-- 5. INVERNO -->
+    <div class="itinerario-card">
+      <div class="itinerario-hero" style="background:linear-gradient(135deg,#060c1a,#0e1a3d,#182d6e);">
+        <div class="itinerario-season-badge">❄️ Dicembre – Marzo</div>
+        <div class="itinerario-title">Foggia al Caldo</div>
+        <div class="itinerario-meta-row">
+          <span class="itinerario-meta-chip">🌡 8–15°C</span>
+          <span class="itinerario-meta-chip">🏠 Indoor</span>
+          <span class="itinerario-meta-chip">🎭 Cultura</span>
+        </div>
+      </div>
+      <div class="itinerario-body">
+        <div class="itinerario-clima" style="color:#3a7abf;background:rgba(58,122,191,0.1);">❄️ Pioggia possibile. Itinerario indoor con luoghi riparati e cultura.</div>
+        <ul class="itinerario-steps">
+          <li class="itinerario-step"><span class="step-time">09:30</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Cattedrale + Chiesa delle Croci</div><div class="step-desc">Doppio percorso sacro: normanni e barocco sotto lo stesso cielo invernale.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">11:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Caffè – Troccoleria Bistrot</div><div class="step-desc">Cioccolata calda e scagliozzi. Via Liceo — 5 min dalla Cattedrale.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">12:30</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Città del Cinema</div><div class="step-desc">13 sale climatizzate. Piazzale De Lauro Matera. Bus 7.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">15:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Pranzo – Ambasciata Orsarese</div><div class="step-desc">Pane cotto con salsiccia e rape. Il rifugio perfetto per il freddo.</div></div></li>
+          <li class="itinerario-step"><span class="step-time">17:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Ipogei di San Giovanni</div><div class="step-desc">I tunnel sotterranei più misteriosi di Foggia (verificare apertura).</div></div></li>
+          <li class="itinerario-step"><span class="step-time">19:00</span><div class="step-dot"></div><div class="step-content"><div class="step-title">Teatro Umberto Giordano</div><div class="step-desc">Stagione lirica o balletto. L'inverno culturale di Foggia nel suo tempio.</div></div></li>
+        </ul>
+      </div>
+      <div class="itinerario-footer">
+        <span class="itinerario-footer-info">🚌 Bus 7 per Cinema · 🚕 Taxi serale</span>
+        <button class="btn-start-tour" onclick="showPage('mappa')">Inizia →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== TRASPORTI ===== -->
+<div id="page-trasporti" class="page">
+  <div class="page-header">
+    <h1 class="page-header-title">Come arrivare</h1>
+    <p class="page-header-sub">Trasporti per Foggia e in città</p>
+  </div>
+  <div class="section" style="padding-top:8px;">
+
+    <div class="trasporti-section-title">🚉 Arrivare a Foggia</div>
+
+    <div class="trasporti-card">
+      <div class="trasporti-card-header"><span class="trasporti-icon">🚂</span><span class="trasporti-name">Treno</span><span class="trasporti-badge">Consigliato</span></div>
+      <div class="trasporti-body">Stazione Centrale FS in Piazza Vittorio Veneto — hub principale sulle linee Napoli–Bari e Bologna–Lecce. Da Roma circa 3 ore, da Milano 7–9 ore.</div>
+      <a href="https://www.trenitalia.com" target="_blank" class="trasporti-link">Orari Trenitalia →</a>
+    </div>
+
+    <div class="trasporti-card">
+      <div class="trasporti-card-header"><span class="trasporti-icon">🚌</span><span class="trasporti-name">Autobus</span></div>
+      <div class="trasporti-body">Terminal bus accanto alla Stazione FS. Linee FlixBus, MarinoBus e SITA Sud coprono Puglia, Campania e Sicilia.</div>
+      <a href="https://www.flixbus.it" target="_blank" class="trasporti-link">FlixBus →</a>
+    </div>
+
+    <div class="trasporti-card">
+      <div class="trasporti-card-header"><span class="trasporti-icon">🚗</span><span class="trasporti-name">Auto</span></div>
+      <div class="trasporti-body">Uscita A14 Bologna–Taranto oppure SS655 dall'A16 Napoli–Canosa. Parcheggi gratuiti e a pagamento in centro.</div>
+    </div>
+
+    <div class="trasporti-card">
+      <div class="trasporti-card-header"><span class="trasporti-icon">✈️</span><span class="trasporti-name">Aereo</span></div>
+      <div class="trasporti-body">Aeroporto Gino Lisa (FOG) con voli limitati. Bus Mondo Gino Lisa collega a Bari e alle stazioni ferroviarie.</div>
+      <a href="http://www.aeroportodifoggiaginoelisa.it" target="_blank" class="trasporti-link">Aeroporto Foggia →</a>
+    </div>
+
+    <div class="trasporti-section-title" style="margin-top:24px;">🏙️ Muoversi in città</div>
+
+    <div class="trasporti-card">
+      <div class="trasporti-card-header"><span class="trasporti-icon">🚐</span><span class="trasporti-name">Bus urbani ATAF</span><span class="trasporti-badge">€1,20 / 90 min</span></div>
+      <div class="trasporti-body">Linee 1–24 coprono centro, zona industriale e stazioni. Principali: linea 2, linea 7, F1 notturna. Orari in tempo reale su Moovit.</div>
+      <a href="https://moovitapp.com" target="_blank" class="trasporti-link">Apri Moovit →</a>
+    </div>
+
+    <div class="trasporti-card">
+      <div class="trasporti-card-header"><span class="trasporti-icon">🚕</span><span class="trasporti-name">Taxi & Uber</span><span class="trasporti-badge">€10–15 centro</span></div>
+      <div class="trasporti-body">Disponibili dalla Stazione Centrale. Tariffe fisse centro–periferia indicativamente €10–15.</div>
+    </div>
+
+    <div class="trasporti-card">
+      <div class="trasporti-card-header"><span class="trasporti-icon">🚲</span><span class="trasporti-name">Bici & Bike Sharing</span></div>
+      <div class="trasporti-body">BiciFoggia e app come Nextbike per biciclette condivise. Percorsi ciclabili lungo i principali viali.</div>
+    </div>
+
+    <div class="trasporti-card">
+      <div class="trasporti-card-header"><span class="trasporti-icon">🚶</span><span class="trasporti-name">A piedi</span></div>
+      <div class="trasporti-body">Centro storico — Cattedrale, Arco Federico II, piazze — visitabile in 20–30 min. Evita periferie nelle ore calde d'estate.</div>
+    </div>
+
+    <div class="trasporti-card" style="background:linear-gradient(135deg,rgba(227,6,19,0.08),rgba(227,6,19,0.03));border-color:rgba(227,6,19,0.2);">
+      <div class="trasporti-card-header"><span class="trasporti-icon">🗺️</span><span class="trasporti-name">Province del Gargano</span></div>
+      <div class="trasporti-body">Ferrovie del Gargano e bus ACAPT (anche domenicali). Verifica orari 2026 su Moovit o app ATAF.</div>
+      <a href="https://www.ferroviedelgargano.com" target="_blank" class="trasporti-link">Ferrovie del Gargano →</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== PREFERITI ===== -->
+<div id="page-preferiti" class="page">
+  <div class="page-header">
+    <h1 class="page-header-title">Preferiti</h1>
+    <p class="page-header-sub">I luoghi che hai salvato</p>
+  </div>
+  <div class="section" style="padding-top:8px;"><div id="preferiti-list"></div></div>
+</div>
+
+<!-- ===== PROFILO ===== -->
+<div id="page-profilo" class="page">
+  <div class="page-header">
+    <h1 class="page-header-title">Profilo</h1>
+    <p class="page-header-sub">Impostazioni e preferenze</p>
+  </div>
+  <div class="section" style="padding-top:8px;">
+    <div style="background:var(--bg-card-dark);border-radius:var(--radius-lg);padding:20px;margin-bottom:14px;border:1px solid rgba(255,255,255,0.05);">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="width:56px;height:56px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;">👤</div>
+        <div>
+          <div style="font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--white);">Ospite</div>
+          <div style="font-size:13px;color:var(--gray-400);">Benvenuto su FoggiApp</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--bg-card-dark);border-radius:var(--radius-lg);padding:20px;border:1px solid rgba(255,255,255,0.05);">
+      <div style="font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--white);margin-bottom:14px;">Impostazioni</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+        <span style="font-size:14px;color:var(--gray-400);">🌙 Dark Mode</span>
+        <button onclick="toggleTheme()" style="background:var(--red);color:white;border:none;border-radius:24px;padding:6px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-body);">Attiva</button>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+        <span style="font-size:14px;color:var(--gray-400);">🌍 Lingua</span>
+        <div class="lang-toggle">
+          <button class="lang-btn active" data-lang="IT" onclick="toggleLang('IT')">IT</button>
+          <button class="lang-btn" data-lang="EN" onclick="toggleLang('EN')">EN</button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
+        <span style="font-size:14px;color:var(--gray-400);">❤️ Preferiti salvati</span>
+        <span style="font-size:14px;font-weight:600;color:var(--red);" id="fav-count">0</span>
+      </div>
+    </div>
+    <div style="margin-top:20px;text-align:center;">
+      <div style="font-size:12px;color:var(--gray-600);">FoggiApp v2.0 · Foggia, Capitanata</div>
+      <div style="font-size:11px;color:var(--gray-600);margin-top:4px;">Informazioni storiche basate su fonti verificate</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DETAIL ===== -->
+<div id="page-detail" class="page">
+  <div class="detail-hero">
+    <div id="detail-emoji" style="position:relative;z-index:4;font-size:90px;"></div>
+    <button class="detail-back" onclick="goBack()">←</button>
+    <button class="detail-fav" id="detail-fav-btn">🤍</button>
+  </div>
+  <div class="detail-content">
+    <div class="detail-tag" id="detail-tag"></div>
+    <h1 class="detail-title" id="detail-title"></h1>
+    <div class="detail-info-row" id="detail-info-row"></div>
+    <div class="detail-section">
+      <div class="detail-section-title">Descrizione</div>
+      <p class="detail-text" id="detail-desc"></p>
+    </div>
+    <div class="detail-section" id="detail-storia-section">
+      <div class="detail-section-title">Storia</div>
+      <div class="detail-text" id="detail-storia" style="line-height:1.8;"></div>
+    </div>
+    <div class="detail-section" id="detail-timeline-section">
+      <div class="detail-section-title">Linea del tempo</div>
+      <div class="timeline" id="detail-timeline"></div>
+    </div>
+    <div class="detail-actions">
+      <button class="action-btn" onclick="document.getElementById('detail-fav-btn').click()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Salva
+      </button>
+      <button class="action-btn primary-action" id="detail-maps-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3,6 9,3 15,6 21,3 21,18 15,21 9,18 3,21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+        Vai al luogo
+      </button>
+      <button class="action-btn" onclick="showPage('mappa')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+        Mappa
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== BOTTOM NAV – 6 voci ========== -->
+<nav class="bottom-nav">
+  <button class="nav-item active" data-page="home" onclick="showPage('home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Home</span>
+  </button>
+  <button class="nav-item" data-page="mappa" onclick="showPage('mappa')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3,6 9,3 15,6 21,3 21,18 15,21 9,18 3,21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+    <span>Mappa</span>
+  </button>
+  <button class="nav-item" data-page="itinerari" onclick="showPage('itinerari')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h12M3 18h8"/><circle cx="20" cy="17" r="3"/><path d="M20 14v3l1.5 1.5"/></svg>
+    <span>Itinerari</span>
+  </button>
+  <button class="nav-item" data-page="trasporti" onclick="showPage('trasporti')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    <span>Trasporti</span>
+  </button>
+  <button class="nav-item" data-page="preferiti" onclick="showPage('preferiti')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <span>Preferiti</span>
+  </button>
+  <button class="nav-item" data-page="profilo" onclick="showPage('profilo')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span>Profilo</span>
+  </button>
+</nav>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+  setInterval(() => {
+    const el = document.getElementById('fav-count');
+    if (el) el.textContent = favorites.length;
+  }, 500);
+</script>
+</body>
+</html>
